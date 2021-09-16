@@ -35,6 +35,9 @@ async function getStudent(req, res, next) {
       console.log(error)
       return res.status(500).end()
     }
+    if(!studentArray.length){
+        return res.status(404).send();
+      }
     const student = studentArray[0];
     return res.send(student)
   })
@@ -55,6 +58,10 @@ async function getStudentGradesReport(req, res, next) {
       console.log(error)
       return res.status(500).end()
     }
+
+    if(!studentArray.length){
+        return res.status(404).send();
+      }
 
     const student = studentArray[0];
 
