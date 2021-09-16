@@ -69,6 +69,26 @@ tape('Request for all courses with their stats should return 200', (t) => {
   const url = `${endpoint}/course/all/grades`
     jsonist.get(url, (error, data, response) =>{
      t.equal(200, response.statusCode)
+     
+     t.equal(data.Calculus.averageGrade,"50.09")
+     t.equal(data.Calculus.highest,100)
+     t.equal(data.Calculus.lowest,0)
+
+     t.equal(data.Microeconomics.averageGrade,"49.81")
+     t.equal(data.Microeconomics.highest,100)
+     t.equal(data.Microeconomics.lowest,0)
+
+     t.equal(data.Statistics.averageGrade,"50.02")
+     t.equal(data.Statistics.highest,100)
+     t.equal(data.Statistics.lowest,0)
+
+     t.equal(data.Astronomy.averageGrade,"50.04")
+     t.equal(data.Astronomy.highest,100)
+     t.equal(data.Astronomy.lowest,0)
+
+     t.equal(data.Philosophy.averageGrade,"50.02")
+     t.equal(data.Philosophy.highest,100)
+     t.equal(data.Philosophy.lowest,0)
       t.end()
     })
 })
