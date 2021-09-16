@@ -81,5 +81,48 @@ async function getStudentGradesReport(req, res, next) {
 }
 
 async function getCourseGradesReport(req, res, next) {
-  throw new Error('This method has not been implemented yet.')
+  fs.readFile('grades.json', (error, data) => {
+      if (error) {
+        console.log(error)
+        return res.status(500).end();
+      }
+      let grades = JSON.parse(data);
+
+      let uniqueCourses = [];
+      let courseStat = {};
+      
+
+      grades.forEach((grade) =>{
+        if(courseStat[grade.course] != null){
+          if(courseStat[grade.course]['highest'] < grade.grade){
+            courseStat[grade.course]['highest'] = grade.grade
+          } 
+          if(courseStat[grade.course]['lowest'] > grade.grade){
+            courseStat[grade.course]['lowest'] = grade.grade
+          }
+          courseStat[grade.course]['total'] = courseStat[grade.course]['total'] + grade.grade
+          courseStat[grade.course]['count'] = courseStat[grade.course]['count'] + 1
+
+        } else{
+          if(!uniqueCourses.includes(grade.course)){
+            uniqueCourses.push(grade.course)
+          }
+          courseStat[grade.course] = {}
+          courseStat[grade.course]['highest'] = grade.grade
+          courseStat[grade.course]['lowest'] = grade.grade
+          courseStat[grade.course]['total'] = grade.grade
+          courseStat[grade.course]['count'] = 1
+        }
+      })
+
+     uniqueCourses.forEach(element => {
+       courseStat[element]['averageGrade'] = (courseStat[element]['total']/courseStat[element]['count']).toFixed(2)
+       courseStat[element]['total'] = undefined;
+       courseStat[element]['count'] = undefined;
+     });
+
+      res.send(
+        courseStat
+      );
+})
 }
