@@ -104,7 +104,7 @@ async function getCourseGradesReport(req, res, next) {
           if(courseStat[grade.course]['highest'] < grade.grade){
             courseStat[grade.course]['highest'] = grade.grade
           } 
-          if(courseStat[grade.course]['lowest'] > grade.grade){
+          else if(courseStat[grade.course]['lowest'] > grade.grade){
             courseStat[grade.course]['lowest'] = grade.grade
           }
           courseStat[grade.course]['total'] = courseStat[grade.course]['total'] + grade.grade
