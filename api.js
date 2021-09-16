@@ -111,9 +111,7 @@ async function getCourseGradesReport(req, res, next) {
           courseStat[grade.course]['count'] = courseStat[grade.course]['count'] + 1
 
         } else{
-          if(!uniqueCourses.includes(grade.course)){
-            uniqueCourses.push(grade.course)
-          }
+          uniqueCourses.push(grade.course)
           courseStat[grade.course] = {}
           courseStat[grade.course]['highest'] = grade.grade
           courseStat[grade.course]['lowest'] = grade.grade
