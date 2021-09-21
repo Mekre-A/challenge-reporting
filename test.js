@@ -29,6 +29,48 @@ tape('Request for student data with valid and existing id should return with 200
     })
 })
 
+tape('Request for student data with valid and existing id should return with a correct object', (t) => {
+  const url = `${endpoint}/student/34`
+    jsonist.get(url, (error, data, response) =>{
+     t.equal(200, response.statusCode)
+     t.deepEqual(data, {
+        id: 34,
+        first_name: 'Moises',
+        last_name: 'Kling',
+        email: 'Moises26@hotmail.com',
+        is_registered: 0,
+        is_approved: 0,
+        password_hash: '17507d691d0e6f64ff499f794979becb52e52429',
+        address: '1954 Klein Knolls Apt. 705',
+        city: 'Kenner',
+        state: 'IN',
+        zip: '52338',
+        phone: '312-563-9489 x045',
+        created: '1628722431044.0',
+        last_login: '1628750813796.0',
+        ip_address: '211.59.92.11'
+      })
+      t.end()
+    })
+})
+
+tape('Request for a student information should not take more than 500 ms', (t) => {
+  const url = `${endpoint}/student/34`
+    t.timeoutAfter(500)
+    jsonist.get(url, (error, data, response) =>{ 
+     t.equal(200, response.statusCode)
+      t.end()
+    })
+})
+
+tape('Request for a student information with a valid but non-existing id should return 404', (t) => {
+  const url = `${endpoint}/student/1000001`
+    jsonist.get(url, (error, data, response) =>{ 
+     t.equal(404, response.statusCode)
+      t.end()
+    })
+})
+
 tape('Request for student data with invalid id should return 400', (t) => {
   const url = `${endpoint}/student/0`
     jsonist.get(url, (error, data, response) =>{
@@ -38,12 +80,58 @@ tape('Request for student data with invalid id should return 400', (t) => {
 })
 
 
-tape('Request for grades of a student with valid id should return the grades of a student', (t) => {
+tape('Request for grades of a student with valid id should return the correct amount of grades of a student', (t) => {
   const url = `${endpoint}/student/1/grades`
     jsonist.get(url, (error, data, response) =>{
      t.equal(200, response.statusCode)
      t.equal(data.grades.length, 4)
      t.end()
+    })
+})
+
+tape(`Request for a student's grade information should not take more than 500 ms`, (t) => {
+  const url = `${endpoint}/student/34/grades`
+    t.timeoutAfter(500)
+    jsonist.get(url, (error, data, response) =>{ 
+     t.equal(200, response.statusCode)
+      t.end()
+    })
+})
+
+tape('Request for grades of a student with valid id should return the correct grades of a student along with the student information', (t) => {
+  const url = `${endpoint}/student/2/grades`
+    jsonist.get(url, (error, data, response) =>{
+     t.equal(200, response.statusCode)
+     t.deepEqual(data, {
+        id: 2,
+        first_name: 'Norwood',
+        last_name: 'Swift',
+        email: 'Norwood.Swift@hotmail.com',
+        is_registered: 1,
+        is_approved: 0,
+        password_hash: 'b869fb32d6b011ee661483c1b3989829984a68eb',
+        address: '41595 Miller Forks Suite 966',
+        city: 'Urbana',
+        state: 'WV',
+        zip: '79106',
+        phone: '(816) 514-7643 x5654',
+        created: '1628752628336.0',
+        last_login: '1628784980084.0',
+        ip_address: '198.149.242.185',
+        grades: [
+          { course: 'Calculus', grade: 9 },
+          { course: 'Microeconomics', grade: 11 }
+        ]
+      })
+     t.end()
+    })
+})
+
+tape('Request for grades of a student information with a valid but non-existing id should return 404', (t) => {
+  const url = `${endpoint}/student/1000001/grades`
+    jsonist.get(url, (error, data, response) =>{ 
+     t.equal(404, response.statusCode)
+      t.end()
     })
 })
 
@@ -89,6 +177,15 @@ tape('Request for all courses with their stats should return 200', (t) => {
      t.equal(data.Philosophy.averageGrade,"50.02")
      t.equal(data.Philosophy.highest,100)
      t.equal(data.Philosophy.lowest,0)
+      t.end()
+    })
+})
+
+tape(`Request for all courses with their stats should not take more than 500 ms`, (t) => {
+  const url = `${endpoint}/course/all/grades`
+    t.timeoutAfter(500)
+    jsonist.get(url, (error, data, response) =>{ 
+     t.equal(200, response.statusCode)
       t.end()
     })
 })
