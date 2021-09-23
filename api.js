@@ -1,6 +1,7 @@
 const knex = require('./db')
 const validator = require('validator')
 const fs = require('fs');
+const grades = require('./grades.json')
 
 
 module.exports = {
@@ -65,50 +66,36 @@ async function getStudentGradesReport(req, res, next) {
 
     const student = studentArray[0];
 
-    fs.readFile('grades.json', (error, data) => {
-      if (error) {
-        console.log(error)
-        return res.status(500).end();
-      }
-      let grades = JSON.parse(data);
+    let studentGrades = []
+      
 
-      grades = grades.filter((json) => json.id === student.id).map((grade) => {
-        grade.id = undefined;
-        return grade;
-      })
-      if(!grades.length){
+      studentGrades = grades.filter((json) => json.id === student.id)
+      if(!studentGrades.length){
         return res.status(404).send();
       }
-      student.grades = grades
+      student.grades = studentGrades
       return res.send(student);
-    })
 
 
   })
 }
 
-async function getCourseGradesReport(req, res, next) {
-  fs.readFile('grades.json', (error, data) => {
-      if (error) {
-        console.log(error)
-        return res.status(500).end();
-      }
-      let grades = JSON.parse(data);
 
-      let uniqueCourses = [];
-      let courseStat = {};
+async function getCourseGradesReport(req, res, next) {
+  let uniqueCourses = [];
+  let courseStat = {};
       
 
       grades.forEach((grade) =>{
         if(courseStat[grade.course] != null){
           if(courseStat[grade.course]['highest'] < grade.grade){
-            courseStat[grade.course]['highest'] = grade.grade
+           courseStat[grade.course]['highest'] = grade.grade
           } 
           else if(courseStat[grade.course]['lowest'] > grade.grade){
-            courseStat[grade.course]['lowest'] = grade.grade
+           courseStat[grade.course]['lowest'] = grade.grade
           }
           courseStat[grade.course]['total'] = courseStat[grade.course]['total'] + grade.grade
-          courseStat[grade.course]['count'] = courseStat[grade.course]['count'] + 1
+         courseStat[grade.course]['count'] = courseStat[grade.course]['count'] + 1
 
         } else{
           uniqueCourses.push(grade.course)
@@ -118,7 +105,10 @@ async function getCourseGradesReport(req, res, next) {
           courseStat[grade.course]['total'] = grade.grade
           courseStat[grade.course]['count'] = 1
         }
+      
       })
+
+      
 
      uniqueCourses.forEach(element => {
        courseStat[element]['averageGrade'] = (courseStat[element]['total']/courseStat[element]['count']).toFixed(2)
@@ -129,5 +119,4 @@ async function getCourseGradesReport(req, res, next) {
       res.send(
         courseStat
       );
-})
 }

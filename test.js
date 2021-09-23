@@ -99,30 +99,33 @@ tape(`Request for a student's grade information should not take more than 500 ms
 })
 
 tape('Request for grades of a student with valid id should return the correct grades of a student along with the student information', (t) => {
-  const url = `${endpoint}/student/2/grades`
+  const url = `${endpoint}/student/69/grades`
     jsonist.get(url, (error, data, response) =>{
      t.equal(200, response.statusCode)
      t.deepEqual(data, {
-        id: 2,
-        first_name: 'Norwood',
-        last_name: 'Swift',
-        email: 'Norwood.Swift@hotmail.com',
-        is_registered: 1,
-        is_approved: 0,
-        password_hash: 'b869fb32d6b011ee661483c1b3989829984a68eb',
-        address: '41595 Miller Forks Suite 966',
-        city: 'Urbana',
-        state: 'WV',
-        zip: '79106',
-        phone: '(816) 514-7643 x5654',
-        created: '1628752628336.0',
-        last_login: '1628784980084.0',
-        ip_address: '198.149.242.185',
-        grades: [
-          { course: 'Calculus', grade: 9 },
-          { course: 'Microeconomics', grade: 11 }
+        "id": 69,
+        "first_name": "Trace",
+        "last_name": "Mitchell",
+        "email": "Trace52@gmail.com",
+        "is_registered": 1,
+        "is_approved": 1,
+        "password_hash": "d636f11bcbe3b0018c71e5155fb2e85dcdb6f751",
+        "address": "1809 Koss Mountain Suite 090",
+        "city": "Mesquite",
+        "state": "NM",
+        "zip": "69856",
+        "phone": "380.772.3423",
+        "created": "1628787536747.0",
+        "last_login": "1628784209450.0",
+        "ip_address": "212.23.250.166",
+        "grades": [
+            {
+                "id": 69,
+                "course": "Philosophy",
+                "grade": 9
+            }
         ]
-      })
+    })
      t.end()
     })
 })
