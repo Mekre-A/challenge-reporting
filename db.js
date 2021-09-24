@@ -1,3 +1,4 @@
+
 let knex
 
 if (!knex) {
@@ -9,5 +10,6 @@ if (!knex) {
     useNullAsDefault: true
   })
 }
+
 
 module.exports = knex
