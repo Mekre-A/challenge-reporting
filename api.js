@@ -47,12 +47,6 @@ async function getStudent(req, res, next) {
     return res.send(student)
   })
 
-   await knex.schema.createTable('grades', table =>{
-      table.integer('id'),
-      table.string('course'),
-      table.integer('grade')
-    })
-
 }
 
 async function getStudentGradesReport(req, res, next) {
